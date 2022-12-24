@@ -11,7 +11,12 @@ import { PokemonMiniCard } from "./PokemonMiniCard";
 import { LoadingComponent } from "../LoadingComponent"; //
 import clsx from "clsx";
 //
-import { useAppSelector } from "../../hooks/hook";
+import { useAppDispatch, useAppSelector } from "../../hooks/hook";
+import {
+  fetchPokemons,
+  selectPokemonsByFilter,
+} from "../../store/pokemonSlice";
+import { useSelector } from "react-redux";
 
 enum SORT {
   byAttack = "byAttack",
@@ -33,31 +38,23 @@ function MyComponent<T extends ElementType>({
 }
 
 export const PokemonsList = (): JSX.Element => {
-  //
+  const dispatch = useAppDispatch();
+
   const storePokemons = useAppSelector((state) => state.pokemon.list);
+  //const storePokemons = useAppSelector((state) => selectPokemonsByFilter);
   const { loading, error } = useAppSelector((state) => state.pokemon);
+  useEffect(() => {
+    if (storePokemons.length > 1) return;
+    dispatch(fetchPokemons());
+  }, [dispatch]);
+  //
+
   //
   const [searchPhrase, setSearchPhrase] = useState("");
   const [filteredPokemons, setFilteredPokemons] = useState<Pokemon[]>([]);
   const [sortState, setSortState] = useState<string>(SORT.byId);
   //
-  const [showButton, setShowButton] = useState(false);
-  useEffect(() => {
-    window.addEventListener("scroll", () => {
-      if (window.pageYOffset > 300) {
-        setShowButton(true);
-      } else {
-        setShowButton(false);
-      }
-    });
-  }, []);
-  //
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth", // for smoothly scrolling
-    });
-  };
+
   //
   const searchHandle = (searchPhrase: string): Pokemon[] => {
     const filtered = storePokemons.filter((pokemon) => {
@@ -104,7 +101,6 @@ export const PokemonsList = (): JSX.Element => {
 
   return (
     <>
-      {" "}
       <div className="w-full mx-auto flex flex-row flex-wrap">
         <ListNavComponent
           setSearchPhrase={setSearchPhrase}
@@ -113,7 +109,10 @@ export const PokemonsList = (): JSX.Element => {
           setSortState={setSortState}
         />
         {error ? (
-          <div>Sorry, something went wrong...</div>
+          <>
+            <div>Sorry, something went wrong...</div>
+            <div className="overflow-hidden text-sm">{error}</div>
+          </>
         ) : loading ? (
           <LoadingComponent />
         ) : filteredPokemons ? (
@@ -121,19 +120,6 @@ export const PokemonsList = (): JSX.Element => {
             <PokemonMiniCard key={index} pokemon={item} />
           ))
         ) : null}
-
-        <button
-          className={clsx([
-            {
-              "fixed right-80 bottom-5 p-2": true,
-            },
-            { " border border-gray-700": showButton },
-            { "hidden border border-gray-700": !showButton },
-          ])}
-          onClick={scrollToTop}
-        >
-          Back to top
-        </button>
       </div>
     </>
   );

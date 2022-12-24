@@ -8,7 +8,7 @@ const HeaderComponent = () => {
           Main Page
         </Link>
         <Link to="/Pokemons" className="w-1/5 hover:text-yellow-400">
-          Pokemons
+          Pokemons Page
         </Link>
       </div>
     </div>

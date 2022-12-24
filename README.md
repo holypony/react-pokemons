@@ -1,7 +1,6 @@
 Pokemon loader:
 
-- pre load all pokemons
-
+- preload all pokemons
 - React
 - Typescript
 - Tailwind

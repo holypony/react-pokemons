@@ -20,11 +20,6 @@ export const PokemonMiniCard = ({
     dispatch(addSelectedPokemon(pokemon));
   };
 
-  const handleFavoriteClick = () => {
-    console.log(1);
-    //dispatch(addFavoritesPokemon(pokemon));
-  };
-
   return (
     <div
       onClick={handleCardClick}
@@ -37,14 +32,6 @@ export const PokemonMiniCard = ({
         { "hover:bg-white hover:bg-opacity-10": !isCurrentPokemonSelected },
       ])}
     >
-      <div onClick={handleFavoriteClick} className="flex flex-row justify-end">
-        {" "}
-        <img
-          className="h-4 w-4 invert"
-          src="https://cdn-icons-png.flaticon.com/128/149/149220.png"
-        />
-      </div>
-
       {pokemon.sprites.front_default ? (
         <img className="h-30 w-30" src={pokemon.sprites.front_default} />
       ) : (

@@ -23,7 +23,7 @@ export const ListNavComponent = ({
   };
 
   return (
-    <div className=" mr-2 w-full rounded-md  flex flex-row flex-wrap gap-2">
+    <div className=" mr-2 mb-2 w-full rounded-md  flex flex-row flex-wrap gap-2">
       <form action="">
         <input
           type="text"
@@ -35,7 +35,7 @@ export const ListNavComponent = ({
       </form>
       <span className="my-auto text-zinc-400 text-base">Sort by:</span>
       <select
-        className="bg-black"
+        className="bg-black outline-none"
         name="sort"
         id="lang"
         value={sortState}

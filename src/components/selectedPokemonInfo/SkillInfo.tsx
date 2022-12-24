@@ -7,7 +7,7 @@ export const SkillInfo = ({ pokemon }: { pokemon: Pokemon }) => {
   const [pokemonSkillEffects, isLoading] = useGetPokemonSkillsEffects(pokemon);
   return (
     <div>
-      <div className="text-left text-sm">
+      <div className="text-left text-xs">
         <div className="font-bold">Skills: {pokemon.abilities.length}</div>
         {pokemon.abilities.map((item, index) => (
           <div key={index}>
@@ -16,7 +16,9 @@ export const SkillInfo = ({ pokemon }: { pokemon: Pokemon }) => {
             </div>
             <div>
               {isLoading ? "Loading..." : null}
-              {pokemonSkillEffects ? pokemonSkillEffects[index] : "cant fetch"}
+              {pokemonSkillEffects
+                ? pokemonSkillEffects[index]
+                : "cant fetch skill info"}
             </div>
           </div>
         ))}

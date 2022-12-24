@@ -10,6 +10,20 @@ import axios from "axios";
 import { BaseURL } from "../constants/baseUrl";
 import { Endpoints } from "../constants/endPoints";
 import type { Pokemon } from "../models/Pokemon";
+import { createSelector } from "@reduxjs/toolkit";
+
+// create selector
+const getAllPokemons = (state: PokemonsState) => state.list;
+const getSelectedPokemons = (state: PokemonsState) => state.selected;
+
+export const selectPokemonsByFilter = createSelector(
+  [getAllPokemons],
+  (pokemons) => {
+    console.log("custom selector runned");
+
+    return pokemons.reduce((total: number, curr: Pokemon) => curr.id, 0);
+  }
+);
 
 type RejectValueType = {
   rejectValue: string;
