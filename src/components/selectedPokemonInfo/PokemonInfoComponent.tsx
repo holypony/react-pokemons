@@ -21,7 +21,7 @@ export const PokemonInfoComponent = (): JSX.Element => {
       <div className="flex flex-col justify-center gap-2">
         <>
           <div className="text-lg">
-            You pick: {pokemon ? capitalize(pokemon.name) : "Select pokemon"}
+            You pick: {pokemon ? capitalize(pokemon.name) : "none"}
           </div>
           <div className="flex flex-col justify-center">
             <img

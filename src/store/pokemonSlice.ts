@@ -11,17 +11,19 @@ import { BaseURL } from "../constants/baseUrl";
 import { Endpoints } from "../constants/endPoints";
 import type { Pokemon } from "../models/Pokemon";
 import { createSelector } from "@reduxjs/toolkit";
+import { RootState } from ".";
 
 // create selector
 const getAllPokemons = (state: PokemonsState) => state.list;
-const getSelectedPokemons = (state: PokemonsState) => state.selected;
+
+const getSelectedPokemons = (state: RootState) => state.pokemon.list;
 
 export const selectPokemonsByFilter = createSelector(
-  [getAllPokemons],
+  [getSelectedPokemons],
   (pokemons) => {
     console.log("custom selector runned");
-
-    return pokemons.reduce((total: number, curr: Pokemon) => curr.id, 0);
+    //return pokemons.reduce((list) => pokemons, initialState.list);
+    return pokemons.filter((pokemons) => pokemons.id < 5);
   }
 );
 
@@ -63,7 +65,7 @@ export const fetchPokemons = createAsyncThunk<
   undefined,
   { rejectValue: string }
 >("pokemons/fetchPokemons", async function (_, { rejectWithValue }) {
-  const pokemonsToLoad = 100;
+  const pokemonsToLoad = 50;
   let currentPokemonId = 1;
 
   const pokemonArray: Pokemon[] | undefined = [];

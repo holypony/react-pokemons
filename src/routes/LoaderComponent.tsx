@@ -29,7 +29,7 @@ export const LoaderComponent = (): JSX.Element => {
   return (
     <>
       <HeaderComponent />
-      <div className="component relative">
+      <div className="component relative h-min-screen">
         <div className="flex flex-row">
           <div className="w-2/3">
             <PokemonsList />

@@ -17,7 +17,11 @@ export const PokemonMiniCard = ({
 
   const handleCardClick = () => {
     if (pokemon.id === null) return;
-    dispatch(addSelectedPokemon(pokemon));
+    if (selectedPokemon?.id === pokemon.id) {
+      dispatch(addSelectedPokemon(undefined));
+    } else {
+      dispatch(addSelectedPokemon(pokemon));
+    }
   };
 
   return (

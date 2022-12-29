@@ -1,47 +1,27 @@
-import React, {
-  ComponentPropsWithoutRef,
-  ElementType,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { useEffect, useState } from "react";
 import { Pokemon } from "../../models/Pokemon";
 import { ListNavComponent } from "./ListNavComponent";
 import { PokemonMiniCard } from "./PokemonMiniCard";
 import { LoadingComponent } from "../LoadingComponent"; //
-import clsx from "clsx";
 //
 import { useAppDispatch, useAppSelector } from "../../hooks/hook";
 import {
   fetchPokemons,
   selectPokemonsByFilter,
 } from "../../store/pokemonSlice";
-import { useSelector } from "react-redux";
-
+import { selectFilter } from "../../store/selectors";
 enum SORT {
   byAttack = "byAttack",
   byId = "byId",
   byHp = "byHp",
 }
 
-type TestProps<T extends ElementType> = {
-  tag?: T;
-} & ComponentPropsWithoutRef<T>;
-
-function MyComponent<T extends ElementType>({
-  tag,
-  children,
-  ...rest
-}: TestProps<T>) {
-  const Component = tag || "div";
-  return <Component {...rest}>{children}</Component>;
-}
-
 export const PokemonsList = (): JSX.Element => {
   const dispatch = useAppDispatch();
 
-  const storePokemons = useAppSelector((state) => state.pokemon.list);
-  //const storePokemons = useAppSelector((state) => selectPokemonsByFilter);
+  //const storePokemons = useAppSelector((state) => state.pokemon.list);
+  //const storePokemons = useAppSelector(selectPokemonsByFilter);
+  const storePokemons = useAppSelector(selectFilter);
   const { loading, error } = useAppSelector((state) => state.pokemon);
   useEffect(() => {
     if (storePokemons.length > 1) return;
@@ -64,7 +44,9 @@ export const PokemonsList = (): JSX.Element => {
     });
     return filtered;
   };
+
   //
+
   const sortArr = (pokemons: Pokemon[]): Pokemon[] => {
     console.log(pokemons.length + " sort arr pokemons length");
     const items = [...pokemons];
@@ -79,11 +61,15 @@ export const PokemonsList = (): JSX.Element => {
     });
     return items;
   };
+
   //
+
   useEffect(() => {
     if (searchPhrase !== "") {
       const sorted = sortArr(searchHandle(searchPhrase));
       setFilteredPokemons(sorted);
+      setStartPokemonIndex(0);
+      setCurrentPage(1);
       return;
     }
 
@@ -98,7 +84,25 @@ export const PokemonsList = (): JSX.Element => {
   //   console.log("now we sort pokemons");
   //   setFilteredPokemons(sorted);
   // }, [sortState]);
-
+  const pokemonsOnPage = 20;
+  //
+  const [startPokemonIndex, setStartPokemonIndex] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageArr: Pokemon[] = filteredPokemons.slice(
+    startPokemonIndex,
+    startPokemonIndex + pokemonsOnPage
+  );
+  //
+  const nextPage = () => {
+    if (filteredPokemons.length < currentPage * pokemonsOnPage) return;
+    setStartPokemonIndex(startPokemonIndex + pokemonsOnPage);
+    setCurrentPage(currentPage + 1);
+  };
+  const previousPage = () => {
+    if (currentPage === 1) return;
+    setStartPokemonIndex(startPokemonIndex - pokemonsOnPage);
+    setCurrentPage(currentPage - 1);
+  };
   return (
     <>
       <div className="w-full mx-auto flex flex-row flex-wrap">
@@ -115,11 +119,27 @@ export const PokemonsList = (): JSX.Element => {
           </>
         ) : loading ? (
           <LoadingComponent />
-        ) : filteredPokemons ? (
-          filteredPokemons.map((item, index) => (
+        ) : pageArr ? (
+          pageArr.map((item, index) => (
             <PokemonMiniCard key={index} pokemon={item} />
           ))
         ) : null}
+      </div>
+      <div className="flex flex-row gap-2">
+        {" "}
+        <button
+          className=" text-sm font-mono font-bold outline-none rounded-md border border-gray-600 bg-slate-900 p-1"
+          onClick={previousPage}
+        >
+          Previous page
+        </button>
+        <span>{currentPage}</span>
+        <button
+          className=" text-sm font-mono font-bold outline-none rounded-md border border-gray-600 bg-green-600 p-1"
+          onClick={nextPage}
+        >
+          Next page
+        </button>
       </div>
     </>
   );
