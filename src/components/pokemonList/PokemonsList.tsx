@@ -62,8 +62,6 @@ export const PokemonsList = (): JSX.Element => {
     return items;
   };
 
-  //
-
   useEffect(() => {
     if (searchPhrase !== "") {
       const sorted = sortArr(searchHandle(searchPhrase));
@@ -73,19 +71,13 @@ export const PokemonsList = (): JSX.Element => {
       return;
     }
 
-    if (storePokemons.length < 1) return;
     const sorted = sortArr(storePokemons);
     setFilteredPokemons(sorted);
     //
   }, [searchPhrase, sortState, storePokemons]);
 
-  // useMemo(() => {
-  //   const sorted = sortArr(props.pokemons);
-  //   console.log("now we sort pokemons");
-  //   setFilteredPokemons(sorted);
-  // }, [sortState]);
   const pokemonsOnPage = 20;
-  //
+
   const [startPokemonIndex, setStartPokemonIndex] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const pageArr: Pokemon[] = filteredPokemons.slice(

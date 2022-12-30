@@ -9,9 +9,7 @@ export const selectFilter = createSelector(
   (pokemons, filters) => {
     //if (filters.minHp === 0 && filters.maxHp === 999) return pokemons;
 
-    console.log("filter isnt a initial state");
-
-    return pokemons.filter((pokemon) => {
+    const pokemonsFilterArr = pokemons.filter((pokemon) => {
       return (
         pokemon.stats[0].base_stat >= filters.minHp &&
         pokemon.stats[0].base_stat <= filters.maxHp &&
@@ -19,5 +17,8 @@ export const selectFilter = createSelector(
         pokemon.stats[1].base_stat <= filters.maxAttack
       );
     });
+    console.log("1", pokemonsFilterArr);
+    if (pokemonsFilterArr.length > 1) return pokemonsFilterArr;
+    return [];
   }
 );
