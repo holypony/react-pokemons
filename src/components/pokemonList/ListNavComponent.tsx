@@ -69,6 +69,7 @@ export const ListNavComponent = ({
     currentFilters.minAttack = 0;
     currentFilters.minHp = 0;
     currentFilters.maxHp = 999;
+    setSearchPhrase("");
     dispatch(setFilter(currentFilters));
   };
 

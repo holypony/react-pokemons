@@ -109,13 +109,17 @@ export const PokemonsList = (): JSX.Element => {
             <div>Sorry, something went wrong...</div>
             <div className="overflow-hidden text-sm">{error}</div>
           </>
-        ) : loading ? (
-          <LoadingComponent />
-        ) : pageArr ? (
-          pageArr.map((item, index) => (
-            <PokemonMiniCard key={index} pokemon={item} />
-          ))
         ) : null}
+
+        {loading ? <LoadingComponent /> : null}
+
+        {pageArr
+          ? pageArr.map((item, index) => (
+              <PokemonMiniCard key={index} pokemon={item} />
+            ))
+          : null}
+
+        {pageArr.length < 1 ? "Cant find any pokemons with this params" : "2"}
       </div>
       <div className="flex flex-row gap-2">
         {" "}
